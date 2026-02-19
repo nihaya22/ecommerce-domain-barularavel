@@ -25,32 +25,31 @@
 
     {{-- MENU --}}
   <nav class="hidden md:flex items-center gap-7 text-sm font-semibold">
-<!-- hosting scroll ke home  -->
-      <a class="text-slate-700 hover:text-blue-700" href="/">Home</a>
+<!-- Home -->
+      <a class="text-slate-700 hover:text-blue-700 {{ request()->is('/') ? 'text-blue-700 border-b-2 border-blue-600 pb-0.5' : '' }}"
+         href="{{ route('home') }}">Home</a>
 
-<!-- hosting scroll ke domain -->
-      <a class="text-slate-700 hover:text-blue-700"
-        href="{{ url('/#cek-domain') }}">
+<!-- Domain -->
+      <a class="text-slate-700 hover:text-blue-700 {{ request()->is('domain*') ? 'text-blue-700 border-b-2 border-blue-600 pb-0.5' : '' }}"
+         href="{{ route('domain.index') }}">
           Domain
       </a>
 
-
-
-<!-- hosting scroll ke hosting  -->
-      <a class="text-slate-700 hover:text-blue-700"
-      href="{{ url('/#hosting') }}">
+<!-- Hosting -->
+      <a class="text-slate-700 hover:text-blue-700 {{ request()->is('hosting') ? 'text-blue-700 border-b-2 border-blue-600 pb-0.5' : '' }}"
+      href="{{ route('hosting.index') }}">
       Hosting
       </a>
 
-<!-- hosting scroll ke website  -->
-      <a class="text-slate-700 hover:text-blue-700" 
-      href="{{ url('/#website') }}">
+<!-- Website -->
+      <a class="text-slate-700 hover:text-blue-700 {{ request()->is('website') ? 'text-blue-700 border-b-2 border-blue-600 pb-0.5' : '' }}"
+      href="{{ route('website.index') }}">
       website
       </a>
 
-<!-- Contact scroll ke Dukungan Teknis -->
-      <a class="text-slate-700 hover:text-blue-700"
-      href="{{ url('/#contact') }}">
+<!-- Contact -->
+      <a class="text-slate-700 hover:text-blue-700 {{ request()->is('contact') ? 'text-blue-700 border-b-2 border-blue-600 pb-0.5' : '' }}"
+      href="{{ route('contact.index') }}">
       Contact
     </a>
 

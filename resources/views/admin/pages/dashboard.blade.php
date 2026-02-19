@@ -33,7 +33,7 @@
         <div class="flex items-start justify-between">
             <div>
                 <p class="text-sm font-semibold text-slate-700">Total Domains</p>
-                <p class="text-3xl font-extrabold text-slate-900 mt-2">24</p>
+                <p class="text-3xl font-extrabold text-slate-900 mt-2">{{ $totalDomains }}</p>
             </div>
             <div class="h-11 w-11 rounded-2xl bg-brand-50 border border-brand-100 grid place-items-center text-brand-700">
                 🌐
@@ -48,7 +48,7 @@
         <div class="flex items-start justify-between">
             <div>
                 <p class="text-sm font-semibold text-slate-700">Total Services</p>
-                <p class="text-3xl font-extrabold text-slate-900 mt-2">12</p>
+                <p class="text-3xl font-extrabold text-slate-900 mt-2">{{ $totalServices }}</p>
             </div>
             <div class="h-11 w-11 rounded-2xl bg-brand-50 border border-brand-100 grid place-items-center text-brand-700">
                 🧩
@@ -62,8 +62,12 @@
     <div class="group bg-white rounded-2xl border border-brand-100 p-5 shadow-soft hover:shadow-md transition">
         <div class="flex items-start justify-between">
             <div>
-                <p class="text-sm font-semibold text-slate-700">Inquiries</p>
-                <p class="text-3xl font-extrabold text-slate-900 mt-2">8</p>
+                <p class="text-sm font-semibold text-slate-700">Inquiries
+                    @if($newInquiries > 0)
+                        <span class="ml-1 text-xs text-white bg-red-500 rounded-full px-2 py-0.5">{{ $newInquiries }} baru</span>
+                    @endif
+                </p>
+                <p class="text-3xl font-extrabold text-slate-900 mt-2">{{ $totalInquiries }}</p>
             </div>
             <div class="h-11 w-11 rounded-2xl bg-brand-50 border border-brand-100 grid place-items-center text-brand-700">
                 ✉️
@@ -78,7 +82,7 @@
         <div class="flex items-start justify-between">
             <div>
                 <p class="text-sm font-semibold text-slate-700">Testimonials</p>
-                <p class="text-3xl font-extrabold text-slate-900 mt-2">5</p>
+                <p class="text-3xl font-extrabold text-slate-900 mt-2">{{ $totalTestimonials }}</p>
             </div>
             <div class="h-11 w-11 rounded-2xl bg-brand-50 border border-brand-100 grid place-items-center text-brand-700">
                 ⭐

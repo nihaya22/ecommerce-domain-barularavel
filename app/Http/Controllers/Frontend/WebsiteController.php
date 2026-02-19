@@ -8,6 +8,6 @@ class WebsiteController extends Controller
 {
     public function index()
     {
-        return view('frontend.pages.website');
+        return view('frontend.pages.website.index');
     }
 }

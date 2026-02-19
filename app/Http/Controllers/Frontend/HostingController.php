@@ -8,6 +8,6 @@ class HostingController extends Controller
 {
     public function index()
     {
-        return view('frontend.pages.hosting');
+        return view('frontend.pages.hosting.index');
     }
 }

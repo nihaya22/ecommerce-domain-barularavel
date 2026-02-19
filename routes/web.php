@@ -1,36 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\HomeController;
-
 
 // ================= IMPORT CONTROLLERS =================
 
 // FRONTEND
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\DomainController as FrontDomainController;
-
-//FRONTEND SERVICE
-Route::get('/service/memperbaiki', function () {
-    return view('frontend.pages.service-form', [
-        'service_name' => 'Memperbaiki Semua Website'
-    ]);
-});
-
-Route::get('/service/menambah', function () {
-    return view('frontend.pages.service-form', [
-        'service_name' => 'Menambah Fitur Website'
-    ]);
-});
-
-Route::get('/service/mengecek', function () {
-    return view('frontend.pages.service-form', [
-        'service_name' => 'Mengecek & Audit Website'
-    ]);
-});
-
-
-
-
+use App\Http\Controllers\Frontend\ServiceOrderController;
+use App\Http\Controllers\Frontend\HostingController;
+use App\Http\Controllers\Frontend\WebsiteController;
+use App\Http\Controllers\Frontend\ContactController;
 
 // ADMIN
 use App\Http\Controllers\Admin\AdminAuthController;
@@ -50,6 +30,22 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/domain', [FrontDomainController::class, 'index'])->name('domain.index');
 Route::get('/domain/{slug}', [FrontDomainController::class, 'show'])->name('domain.show');
 
+// Hosting
+Route::get('/hosting', [HostingController::class, 'index'])->name('hosting.index');
+
+// Website
+Route::get('/website', [WebsiteController::class, 'index'])->name('website.index');
+
+// Contact
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+// Service order form & submission (FRONTEND)
+// BUG FIX #6: Route ServiceOrderController dengan namespace yang benar
+Route::get('/service/{slug}', [ServiceOrderController::class, 'show'])->name('service.show');
+Route::post('/service/{slug}', [ServiceOrderController::class, 'store'])->name('service.store');
+
+// Redirect /login ke admin login
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
@@ -57,97 +53,49 @@ Route::get('/login', function () {
 
 // ================= ADMIN AUTH =================
 
-// Admin login
+// BUG FIX #6: Hapus logout duplikat — logout hanya ada di dalam group auth
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 
 // ================= ADMIN PANEL =================
 
+// BUG FIX #6: Semua route admin dipindahkan ke dalam group middleware('auth') dengan benar
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
-    // TARUH DI SINI
-    Route::get('dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
+    // Dashboard
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // routes lainnya...
-
-
-    // ================= DOMAINS (CRUD MANUAL) =================
-
-    // List domains
+    // ================= DOMAINS (CRUD) =================
     Route::get('domains', [DomainController::class, 'index'])->name('domains');
-
-    // Form tambah
     Route::get('domains/create', [DomainController::class, 'create'])->name('domains.create');
-
-    // Simpan
     Route::post('domains', [DomainController::class, 'store'])->name('domains.store');
-
-    // Form edit
     Route::get('domains/{domain}/edit', [DomainController::class, 'edit'])->name('domains.edit');
-
-    // Update
     Route::put('domains/{domain}', [DomainController::class, 'update'])->name('domains.update');
-
-    // Hapus
     Route::delete('domains/{domain}', [DomainController::class, 'destroy'])->name('domains.destroy');
 
-
     // ================= SERVICES (CRUD) =================
-
-// list
-Route::get('services', [ServiceController::class, 'index'])->name('services');
-
-// form tambah
-Route::get('services/create', [ServiceController::class, 'create'])->name('services.create');
-
-// simpan
-Route::post('services', [ServiceController::class, 'store'])->name('services.store');
-
-// form edit
-Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
-
-// update
-Route::put('services/{service}', [ServiceController::class, 'update'])->name('services.update');
-
-// hapus
-Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
-
+    Route::get('services', [ServiceController::class, 'index'])->name('services');
+    Route::get('services/create', [ServiceController::class, 'create'])->name('services.create');
+    Route::post('services', [ServiceController::class, 'store'])->name('services.store');
+    Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
+    Route::put('services/{service}', [ServiceController::class, 'update'])->name('services.update');
+    Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
     // ================= INQUIRIES =================
     Route::get('inquiries', [InquiryController::class, 'index'])->name('inquiries');
+    Route::get('inquiries/{inquiry}', [InquiryController::class, 'show'])->name('inquiries.show');
+    Route::patch('inquiries/{inquiry}/status', [InquiryController::class, 'updateStatus'])->name('inquiries.updateStatus');
+    Route::delete('inquiries/{inquiry}', [InquiryController::class, 'destroy'])->name('inquiries.destroy');
 
-    // ================= TESTIMONIALS =================
+    // ================= TESTIMONIALS (CRUD) =================
+    Route::get('testimonials', [TestimonialController::class, 'index'])->name('testimonials');
+    Route::get('testimonials/create', [TestimonialController::class, 'create'])->name('testimonials.create');
+    Route::post('testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
+    Route::get('testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('testimonials.edit');
+    Route::put('testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
+    Route::delete('testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
 
-// list
-Route::get('testimonials', [TestimonialController::class, 'index'])
-    ->name('testimonials');
-
-// form tambah
-Route::get('testimonials/create', [TestimonialController::class, 'create'])
-    ->name('testimonials.create');
-
-// simpan
-Route::post('testimonials', [TestimonialController::class, 'store'])
-    ->name('testimonials.store');
-
-// form edit
-Route::get('testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])
-    ->name('testimonials.edit');
-
-// update
-Route::put('testimonials/{testimonial}', [TestimonialController::class, 'update'])
-    ->name('testimonials.update');
-
-// hapus
-Route::delete('testimonials/{testimonial}', [TestimonialController::class, 'destroy'])
-    ->name('testimonials.destroy');
-
-    //================logout=============================
-Route::post('/admin/logout', [AdminAuthController::class, 'logout'])
-    ->name('admin.logout');
-
-
+    // ================= LOGOUT =================
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
