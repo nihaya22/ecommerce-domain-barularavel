@@ -64,65 +64,6 @@
 
             </div>
 
-            {{-- Form Kontak --}}
-            <div class="mt-12 bg-white/10 border border-blue-400 rounded-3xl p-8">
-                <h2 class="text-2xl font-bold mb-6">Kirim Pesan Langsung</h2>
-
-                @if(session('success'))
-                    <div class="mb-4 p-4 bg-green-500/30 border border-green-400 rounded-xl text-green-100 font-semibold">
-                        ✅ {{ session('success') }}
-                    </div>
-                @endif
-
-                <form action="{{ route('contact.send') }}" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label class="block text-sm font-semibold text-blue-200 mb-2">Nama Lengkap</label>
-                        <input type="text" name="name" value="{{ old('name') }}"
-                               placeholder="Masukkan nama Anda"
-                               class="w-full px-4 py-3 rounded-xl bg-white/10 border border-blue-400
-                                      text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300
-                                      @error('name') border-red-400 @enderror">
-                        @error('name')<p class="text-red-300 text-xs mt-1">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-blue-200 mb-2">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}"
-                               placeholder="contoh@email.com"
-                               class="w-full px-4 py-3 rounded-xl bg-white/10 border border-blue-400
-                                      text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300
-                                      @error('email') border-red-400 @enderror">
-                        @error('email')<p class="text-red-300 text-xs mt-1">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-blue-200 mb-2">Nomor WhatsApp</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}"
-                               placeholder="Contoh: 08123456789"
-                               class="w-full px-4 py-3 rounded-xl bg-white/10 border border-blue-400
-                                      text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-blue-200 mb-2">Pesan</label>
-                        <textarea name="message" rows="4"
-                               placeholder="Ceritakan kebutuhan Anda..."
-                               class="w-full px-4 py-3 rounded-xl bg-white/10 border border-blue-400
-                                      text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300
-                                      @error('message') border-red-400 @enderror">{{ old('message') }}</textarea>
-                        @error('message')<p class="text-red-300 text-xs mt-1">{{ $message }}</p>@enderror
-                    </div>
-
-                    <button type="submit"
-                            class="w-full px-6 py-3 rounded-xl bg-white text-blue-800 font-bold
-                                   hover:bg-blue-50 transition shadow-lg">
-                        Kirim Pesan 🚀
-                    </button>
-                </form>
-            </div>
-
-        </div>
 
         <!-- RIGHT SIDE IMAGE -->
         <div class="w-full md:w-1/2 flex justify-center">

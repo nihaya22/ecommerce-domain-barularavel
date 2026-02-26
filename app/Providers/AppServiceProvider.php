@@ -2,34 +2,25 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
 use App\Models\Inquiry;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
-{
-    View::composer('admin.partials.navbar', function ($view) {
-        $newCount = Inquiry::where('status', 'New')->count();
-        $latestInquiries = Inquiry::latest()->take(5)->get();
+    {
+        // Inject notifikasi ke semua view admin — tanpa file Composer terpisah
+        View::composer('admin.*', function ($view) {
+            $unreadInquiries = Inquiry::where('status', 'New')->latest()->take(5)->get();
+            $unreadCount     = Inquiry::where('status', 'New')->count();
 
-        $view->with([
-            'newCount' => $newCount,
-            'latestInquiries' => $latestInquiries
-        ]);
-    });
-}
-
+            $view->with(compact('unreadInquiries', 'unreadCount'));
+        });
+    }
 }

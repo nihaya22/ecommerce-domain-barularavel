@@ -5,35 +5,26 @@
 {{-- ================= SECTION: CEK DOMAIN ================= --}}
 <section class="relative bg-gradient-to-br from-blue-50 to-white py-16">
 
-    {{-- Blur Background --}}
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute -top-28 -left-28 h-96 w-96 rounded-full bg-blue-300/40 blur-3xl"></div>
         <div class="absolute -bottom-32 -right-28 h-[28rem] w-[28rem] rounded-full bg-blue-400/30 blur-3xl"></div>
         <div class="absolute top-20 right-20 h-72 w-72 rounded-full bg-white/40 blur-3xl"></div>
     </div>
 
-    <div class="relative max-w-6xl mx-auto px-4
-                grid md:grid-cols-2 gap-12 items-center">
+    <div class="relative max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
 
         {{-- LEFT : FORM --}}
-        <div id="cek-domain" class="relative">
-
+        <div id="cek-domain">
             <div class="rounded-[2rem] bg-white/90 border border-blue-100
                         shadow-[0_30px_80px_rgba(37,99,235,0.25)] p-6">
 
-                <div class="font-extrabold text-slate-900 text-lg">
-                    Cari domain dulu 💙
-                </div>
+                <div class="font-extrabold text-slate-900 text-lg">Cari domain dulu 💙</div>
+                <p class="text-sm text-slate-600 mt-1">Ketik nama brand kamu, nanti kita cek ketersediaan.</p>
 
-                <p class="text-sm text-slate-600 mt-1">
-                    Ketik nama brand kamu, nanti kita cek ketersediaan.
-                </p>
-
-                <form class="mt-5 flex flex-col sm:flex-row gap-3">
-
+                <div class="mt-5 flex flex-col sm:flex-row gap-3">
                     <input
                         type="text"
-                        name="domain"
+                        id="searchKeyword"
                         placeholder="contoh: tokobuah"
                         class="flex-1 px-4 py-3 rounded-xl border border-blue-100
                                focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -41,97 +32,39 @@
 
                     <select
                         id="tldSelect"
-                        name="tld"
                         class="w-full sm:w-40 px-4 py-3 rounded-xl border border-blue-100
-                               bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    >
-                        <optgroup label="Domain Umum (Global)">
-                            <option value=".com">.com</option>
-                            <option value=".net">.net</option>
-                            <option value=".org">.org</option>
-                            <option value=".info">.info</option>
-                            <option value=".biz">.biz</option>
-                            <option value=".online">.online</option>
-                            <option value=".site">.site</option>
-                            <option value=".website">.website</option>
-                            <option value=".app">.app</option>
-                            <option value=".tech">.tech</option>
-                            <option value=".store">.store</option>
-                            <option value=".blog">.blog</option>
-                            <option value=".digital">.digital</option>
-                            <option value=".cloud">.cloud</option>
-                            <option value=".xyz">.xyz</option>
-                        </optgroup>
-                        <optgroup label="Domain Bisnis & Profesional">
-                            <option value=".company">.company</option>
-                            <option value=".business">.business</option>
-                            <option value=".solutions">.solutions</option>
-                            <option value=".services">.services</option>
-                            <option value=".agency">.agency</option>
-                            <option value=".studio">.studio</option>
-                            <option value=".consulting">.consulting</option>
-                            <option value=".group">.group</option>
-                            <option value=".global">.global</option>
-                        </optgroup>
-                        <optgroup label="Domain Toko & E-Commerce">
-                            <option value=".shop">.shop</option>
-                            <option value=".market">.market</option>
-                            <option value=".mart">.mart</option>
-                            <option value=".sale">.sale</option>
-                            <option value=".deals">.deals</option>
-                        </optgroup>
-                        <optgroup label="Domain Indonesia">
-                            <option value=".id" selected>.id</option>
-                            <option value=".co.id">.co.id</option>
-                            <option value=".or.id">.or.id</option>
-                            <option value=".sch.id">.sch.id</option>
-                            <option value=".ac.id">.ac.id</option>
-                            <option value=".go.id">.go.id</option>
-                            <option value=".desa.id">.desa.id</option>
-                            <option value=".my.id">.my.id</option>
-                            <option value=".biz.id">.biz.id</option>
-                            <option value=".web.id">.web.id</option>
-                        </optgroup>
-                        <optgroup label="Domain Negara">
-                            <option value=".us">.us</option>
-                            <option value=".uk">.uk</option>
-                            <option value=".au">.au</option>
-                            <option value=".sg">.sg</option>
-                            <option value=".jp">.jp</option>
-                            <option value=".my">.my</option>
-                            <option value=".de">.de</option>
-                            <option value=".fr">.fr</option>
-                        </optgroup>
+                               bg-white focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        <option value="">Semua</option>
+                        @php $grouped = $extensions->groupBy('category'); @endphp
+                        @foreach($grouped as $category => $items)
+                            <optgroup label="{{ $category }}">
+                                @foreach($items as $ext)
+                                    <option value="{{ $ext->extension }}">{{ $ext->extension }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
                     </select>
 
-                    <button
-                        type="submit"
-                        class="w-full sm:w-28 px-6 py-3 rounded-xl
-                               bg-blue-600 text-white font-semibold
-                               hover:bg-blue-700 transition shadow-md"
-                    >
+                    <button onclick="filterDomains()"
+                            class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition">
                         Cari
                     </button>
+                </div>
 
-                </form>
+                {{-- Hasil pencarian --}}
+                <div id="searchResult" class="mt-4 hidden">
+                    <div class="text-sm font-semibold text-slate-600 mb-2">Hasil pencarian:</div>
+                    <div id="resultList" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                </div>
             </div>
-
-            {{-- Glow Decoration --}}
-            <div class="absolute -z-10 -bottom-10 -left-10 h-36 w-36 rounded-3xl bg-blue-300/40 blur-2xl"></div>
-            <div class="absolute -z-10 -top-10 -right-10 h-36 w-36 rounded-3xl bg-blue-400/30 blur-2xl"></div>
-
         </div>
 
         {{-- RIGHT : IMAGE --}}
         <div class="flex justify-center md:-translate-y-8">
-            <img
-                src="{{ asset('img/fikir.png') }}"
-                alt="Ilustrasi Domain"
-                class="w-full max-w-xl mix-blend-multiply opacity-95
-                       drop-shadow-[0_30px_80px_rgba(37,99,235,0.25)]"
-            />
+            <img src="{{ asset('img/fikir.png') }}" alt="Ilustrasi Domain"
+                 class="w-full max-w-xl mix-blend-multiply opacity-95
+                        drop-shadow-[0_30px_80px_rgba(37,99,235,0.25)]">
         </div>
-
     </div>
 </section>
 
@@ -140,7 +73,6 @@
 <section class="py-20 bg-gradient-to-b from-white to-blue-50">
     <div class="max-w-6xl mx-auto px-6">
 
-        {{-- Title --}}
         <div class="text-center mb-14" data-aos="fade-down">
             <h2 class="text-4xl font-extrabold text-slate-800">
                 Domain Premium <span class="text-blue-600">Tersedia</span>
@@ -148,6 +80,35 @@
             <p class="mt-4 text-slate-600 max-w-xl mx-auto">
                 Berikut daftar domain pilihan yang siap untuk Anda miliki. Klik untuk melihat detail dan harga.
             </p>
+        </div>
+
+        {{-- Filter Kategori --}}
+        <div class="flex flex-wrap gap-2 justify-center mb-10" id="categoryFilter">
+            <button onclick="filterCategory('semua')"
+                    class="category-btn active px-4 py-2 rounded-full text-sm font-semibold border border-blue-200
+                           bg-blue-600 text-white transition">
+                Semua
+            </button>
+            <button onclick="filterCategory('indonesia')"
+                    class="category-btn px-4 py-2 rounded-full text-sm font-semibold border border-blue-200
+                           bg-white text-slate-600 hover:bg-blue-50 transition">
+                🇮🇩 Indonesia
+            </button>
+            <button onclick="filterCategory('bisnis')"
+                    class="category-btn px-4 py-2 rounded-full text-sm font-semibold border border-blue-200
+                           bg-white text-slate-600 hover:bg-blue-50 transition">
+                🏢 Bisnis
+            </button>
+            <button onclick="filterCategory('toko')"
+                    class="category-btn px-4 py-2 rounded-full text-sm font-semibold border border-blue-200
+                           bg-white text-slate-600 hover:bg-blue-50 transition">
+                🛒 Toko
+            </button>
+            <button onclick="filterCategory('global')"
+                    class="category-btn px-4 py-2 rounded-full text-sm font-semibold border border-blue-200
+                           bg-white text-slate-600 hover:bg-blue-50 transition">
+                🌐 Global
+            </button>
         </div>
 
         {{-- Domain Cards --}}
@@ -163,13 +124,25 @@
                 </a>
             </div>
         @else
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" id="domainGrid">
                 @foreach($domains as $index => $domain)
-                    <div data-aos="fade-up" data-aos-delay="{{ $index * 100 }}"
-                         class="group bg-white rounded-3xl border border-blue-100 shadow-lg p-7
-                                hover:shadow-2xl hover:-translate-y-2 transition-all duration-400">
+                    @php
+                        $name = $domain->name;
+                        $cat = 'global';
+                        if (str_contains($name, '.id') || str_contains($name, '.co.id') || str_contains($name, '.my.id') || str_contains($name, '.web.id') || str_contains($name, '.biz.id') || str_contains($name, '.go.id') || str_contains($name, '.desa.id') || str_contains($name, '.ac.id') || str_contains($name, '.sch.id') || str_contains($name, '.or.id')) {
+                            $cat = 'indonesia';
+                        } elseif (in_array($name, ['.shop', '.store', '.market', '.mart', '.sale', '.deals'])) {
+                            $cat = 'toko';
+                        } elseif (in_array($name, ['.company', '.business', '.solutions', '.services', '.agency', '.studio', '.consulting', '.group', '.global'])) {
+                            $cat = 'bisnis';
+                        }
+                    @endphp
+                    <div data-aos="fade-up" data-aos-delay="{{ ($index % 6) * 100 }}"
+                         data-category="{{ $cat }}"
+                         data-name="{{ $domain->name }}"
+                         class="domain-card group bg-white rounded-3xl border border-blue-100 shadow-lg p-7
+                                hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
-                        {{-- Icon & Badge --}}
                         <div class="flex items-start justify-between mb-5">
                             <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white
                                         flex items-center justify-center text-xl
@@ -183,7 +156,6 @@
                             </span>
                         </div>
 
-                        {{-- Nama Domain --}}
                         <h3 class="text-xl font-extrabold text-slate-800 break-words">
                             {{ $domain->name }}
                         </h3>
@@ -194,7 +166,6 @@
                             </p>
                         @endif
 
-                        {{-- Harga --}}
                         <div class="mt-5 pt-4 border-t border-blue-50">
                             <p class="text-xs text-slate-400 uppercase font-semibold tracking-wide">Harga</p>
                             <p class="text-2xl font-extrabold text-slate-900 mt-1">
@@ -203,7 +174,6 @@
                             </p>
                         </div>
 
-                        {{-- Tombol Aksi --}}
                         <div class="mt-5 flex gap-3">
                             <a href="{{ route('domain.show', $domain->slug) }}"
                                class="flex-1 text-center px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700
@@ -217,18 +187,19 @@
                                 Beli
                             </a>
                         </div>
-
                     </div>
                 @endforeach
             </div>
 
-            {{-- CTA bawah --}}
+            <div class="mt-4 text-center text-sm text-slate-400" id="noResult" style="display:none">
+                Tidak ada domain yang cocok dengan pencarian kamu.
+            </div>
+
             <div class="mt-14 text-center">
                 <p class="text-slate-600 mb-5">Tidak menemukan domain yang diinginkan?</p>
                 <a href="https://wa.me/6281335277477?text=Halo%2C+saya+ingin+request+domain+khusus"
                    target="_blank"
-                   class="inline-block px-8 py-4 rounded-2xl
-                          bg-gradient-to-r from-blue-600 to-blue-800
+                   class="inline-block px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-800
                           text-white font-bold text-lg shadow-xl hover:opacity-90 transition">
                     💬 Request Domain via WhatsApp
                 </a>
@@ -237,5 +208,83 @@
 
     </div>
 </section>
+
+<script>
+// ======= FILTER KATEGORI =======
+function filterCategory(cat) {
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-600');
+    });
+    event.target.classList.add('bg-blue-600', 'text-white');
+    event.target.classList.remove('bg-white', 'text-slate-600');
+
+    const cards = document.querySelectorAll('.domain-card');
+    let visible = 0;
+    cards.forEach(card => {
+        if (cat === 'semua' || card.dataset.category === cat) {
+            card.style.display = '';
+            visible++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    document.getElementById('noResult').style.display = visible === 0 ? 'block' : 'none';
+}
+
+// ======= PENCARIAN =======
+function filterDomains() {
+    const keyword = document.getElementById('searchKeyword').value.toLowerCase().trim();
+    const tld = document.getElementById('tldSelect').value.toLowerCase();
+
+    if (!keyword && !tld) return;
+
+    const cards = document.querySelectorAll('.domain-card');
+    let results = [];
+
+    cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const matchKeyword = !keyword || name.includes(keyword);
+        const matchTld = !tld || name === tld || name.endsWith(tld);
+
+        if (matchKeyword || matchTld) {
+            results.push(card.dataset.name);
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Scroll ke grid
+    document.getElementById('domainGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Tampilkan hasil di kotak pencarian
+    const resultBox = document.getElementById('searchResult');
+    const resultList = document.getElementById('resultList');
+
+    if (keyword) {
+        resultBox.classList.remove('hidden');
+        if (results.length === 0) {
+            resultList.innerHTML = `<div class="text-sm text-slate-400 py-2">Tidak ada domain yang cocok.</div>`;
+        } else {
+            resultList.innerHTML = results.slice(0, 8).map(name => `
+                <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-blue-50 border border-blue-100">
+                    <span class="font-semibold text-slate-800">${keyword}<span class="text-blue-600">${name}</span></span>
+                    <span class="text-xs text-green-600 font-bold">✓ Tersedia</span>
+                </div>
+            `).join('');
+        }
+    } else {
+        resultBox.classList.add('hidden');
+    }
+
+    document.getElementById('noResult').style.display = results.length === 0 ? 'block' : 'none';
+}
+
+// Enter key untuk search
+document.getElementById('searchKeyword')?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') filterDomains();
+});
+</script>
 
 @endsection

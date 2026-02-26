@@ -4,25 +4,22 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Domain;
-use Illuminate\Http\Request;
+use App\Models\DomainExtension;
 
 class DomainController extends Controller
 {
-    // Halaman list domain publik: /domain
     public function index()
     {
-        $domains = Domain::where('status', 'Available')
-            ->latest()
-            ->get();
-
-        return view('frontend.pages.domain.index', compact('domains'));
+        $domains = Domain::available()->latest()->get();
+        $extensions = DomainExtension::all();
+        return view('frontend.pages.domain.index', compact('domains', 'extensions'));
     }
 
-    // BUG FIX #3: Sebelumnya pakai dummy data hardcoded
-    // Sekarang membaca langsung dari database berdasarkan slug
-    public function show(string $slug)
+    public function show($slug)
     {
-        $domain = Domain::where('slug', $slug)->firstOrFail();
+        $domain = Domain::where('slug', $slug)
+            ->where('status', 'Available')
+            ->firstOrFail();
 
         return view('frontend.pages.domain.show', compact('domain'));
     }

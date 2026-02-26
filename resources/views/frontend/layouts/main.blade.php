@@ -40,7 +40,7 @@
 {{-- ✅ penting: bikin layout vertikal full --}}
 <body class="min-h-screen w-full bg-brand-50 text-slate-800 flex flex-col">
     @include('frontend.partials.navbar')
-    @include('frontend.partials.header')
+
 
     <main class="flex-1 w-full">
         @yield('content')

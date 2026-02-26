@@ -3,6 +3,91 @@
 @section('content')
 
 {{-- ================= 1. HERO ================= --}}
+
+<!---------- 1.muali awal tampilan pertama  (✨ lebih modern + clean) -------------->
+
+<section class="relative overflow-hidden bg-gradient-to-br from-[#eaf2ff] via-[#dbe8ff] to-[#c4dcff]">
+
+    {{-- blur bubbles --}}
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute -top-28 -left-28 h-96 w-96 rounded-full bg-blue-300/40 blur-3xl"></div>
+        <div class="absolute -bottom-32 -right-28 h-[28rem] w-[28rem] rounded-full bg-blue-400/30 blur-3xl"></div>
+        <div class="absolute top-20 right-20 h-72 w-72 rounded-full bg-white/40 blur-3xl"></div>
+    </div>
+
+    <div class="relative max-w-6xl mx-auto px-4 py-14 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+
+        <!-- LEFT -->
+        <div>
+            <span class="inline-flex items-center rounded-full bg-white/80 px-3 py-1 text-xs font-extrabold text-blue-700 border border-blue-100">
+                ✨ lebih modern + clean
+            </span>
+
+            <h1 class="mt-4 text-4xl md:text-5xl font-extrabold leading-tight text-ink">
+                Bikin bisnismu online
+                dengan <span class="text-blue-700">domain</span> &
+                <span class="text-blue-700">hosting</span> yang
+                <span class="text-blue-700">profesional</span> 💙
+            </h1>
+
+            <p class="mt-4 text-slate-700 max-w-xl">
+                Mulai dari domain, hosting cepat, sampai jasa website.
+                Semua dibuat gampang, tampilannya clean,
+                dan nuansanya biru muda yang modern ✨
+            </p>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+
+                <a href="{{ url('/#cek-domain') }}"
+                    class="rounded-xl bg-blue-600 hover:bg-blue-700 text-white 
+                        px-6 py-3 text-sm font-semibold
+                        shadow-[0_10px_30px_rgba(37,99,235,0.25)]
+                        text-center transition duration-300">
+                    Cari Domain
+                </a>
+
+                <a href="{{ url('/#hosting') }}"
+                    class="rounded-xl bg-white/90 hover:bg-white text-slate-900 
+                        px-6 py-3 text-sm font-semibold border border-blue-100
+                        text-center transition duration-300">
+                    Lihat Paket Hosting
+                </a>
+
+            </div>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="flex justify-center">
+            <img src="{{ asset('img/hosting.png') }}"
+                alt="Hero Image"
+                class="w-full max-w-md">
+        </div>
+
+    </div>
+</section>
+
+<!-------------------------2.uptime  ------------------------>
+
+</div>
+
+
+            <div class="mt-8 grid grid-cols-3 gap-3 text-center">
+                <div class="rounded-2xl bg-white/80 border border-blue-100 p-4 shadow-sm">
+                    <div class="text-xl font-extrabold text-slate-900">99.9%</div>
+                    <div class="text-xs text-slate-600 mt-1">Uptime</div>
+                </div>
+                <div class="rounded-2xl bg-white/80 border border-blue-100 p-4 shadow-sm">
+                    <div class="text-xl font-extrabold text-slate-900">24/7</div>
+                    <div class="text-xs text-slate-600 mt-1">Support</div>
+                </div>
+                <div class="rounded-2xl bg-white/80 border border-blue-100 p-4 shadow-sm">
+                    <div class="text-xl font-extrabold text-slate-900">SSL</div>
+                    <div class="text-xs text-slate-600 mt-1">Gratis</div>
+                </div>
+            </div>
+
+            <section class="relative overflow-hidden bg-gradient-to-br from-[#eaf2ff] via-[#dbe8ff] to-[#c4dcff]">
+
 <section class="py-8 sm:py-12">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 

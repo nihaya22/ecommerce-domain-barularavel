@@ -57,8 +57,8 @@
                     <th class="px-6 py-3 font-semibold">#</th>
                     <th class="px-6 py-3 font-semibold">Nama</th>
                     <th class="px-6 py-3 font-semibold">Email</th>
+                    <th class="px-6 py-3 font-semibold">No HP</th>
                     <th class="px-6 py-3 font-semibold">Pesan</th>
-                    <th class="px-6 py-3 font-semibold">Status</th>
                     <th class="px-6 py-3 font-semibold text-right">Aksi</th>
                 </tr>
             </thead>

@@ -35,13 +35,14 @@
                 <p class="text-slate-600 mt-3 text-sm">{{ $service->description }}</p>
             </div>
 
-            {{-- Success / Error Flash --}}
+            {{-- Success Flash --}}
             @if(session('success'))
                 <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-2xl text-green-700 text-sm font-semibold">
                     ✅ {{ session('success') }}
                 </div>
             @endif
 
+            {{-- Error Flash --}}
             @if($errors->any())
                 <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">
                     <ul class="list-disc list-inside space-y-1">
@@ -52,7 +53,7 @@
                 </div>
             @endif
 
-            {{-- Form --}}
+            {{-- FORM: POST ke server (simpan ke DB inquiry) --}}
             <form method="POST" action="{{ route('service.store', $service->slug) }}">
                 @csrf
 
@@ -97,6 +98,9 @@
                             placeholder="Jelaskan detail masalah atau fitur yang diinginkan...">{{ old('message') }}</textarea>
                     </div>
 
+                    {{-- Subject otomatis dari nama service --}}
+                    <input type="hidden" name="subject" value="Permintaan Layanan: {{ $service->name }}">
+
                     <button type="submit"
                         class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-300">
                         Kirim Permintaan 🚀
@@ -113,5 +117,29 @@
         </div>
     </div>
 </section>
+
+{{-- Setelah berhasil simpan ke DB, otomatis buka mailto --}}
+@if(session('success'))
+<script>
+    const nama    = @json(session('inquiry_name', ''));
+    const email   = @json(session('inquiry_email', ''));
+    const phone   = @json(session('inquiry_phone', ''));
+    const pesan   = @json(session('inquiry_message', ''));
+    const service = @json($service->name);
+
+    const subject = encodeURIComponent('Permintaan Layanan: ' + service);
+    const body    = encodeURIComponent(
+        'Halo, saya ingin memesan layanan ' + service + '.\n\n' +
+        'Nama    : ' + nama + '\n' +
+        'Email   : ' + email + '\n' +
+        'WhatsApp: ' + (phone || '-') + '\n\n' +
+        'Detail Kebutuhan:\n' + pesan
+    );
+
+    setTimeout(() => {
+        window.location.href = 'mailto:nihayamaulidiyah22@gmail.com?subject=' + subject + '&body=' + body;
+    }, 800);
+</script>
+@endif
 
 @endsection

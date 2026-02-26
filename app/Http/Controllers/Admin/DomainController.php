@@ -9,103 +9,84 @@ use Illuminate\Support\Str;
 
 class DomainController extends Controller
 {
-    // LIST DOMAINS
     public function index()
     {
-        $domains = Domain::latest()->get();
+        $domains = Domain::latest()->paginate(15);
         return view('admin.crud.domains.index', compact('domains'));
     }
 
-    // FORM TAMBAH DOMAIN
     public function create()
     {
         return view('admin.crud.domains.create');
     }
 
-    // SIMPAN DOMAIN BARU
+    private function generateUniqueSlug($fullName)
+    {
+        // Simpan slug dengan format: nama-ext, misal: tokobuah-com, tokobuah-co-id
+        $base = Str::slug($fullName);
+        $slug = $base;
+        $i = 1;
+        while (Domain::where('slug', $slug)->exists()) {
+            $slug = $base . '-' . $i;
+            $i++;
+        }
+        return $slug;
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'name'        => 'required|unique:domains,name',
+            'domain_name' => 'required|string|max:255',
+            'domain_ext'  => 'required|string|max:50',
             'price'       => 'required|numeric|min:0',
             'status'      => 'required|in:Available,Sold',
             'description' => 'nullable|string',
         ]);
 
-        // BUG FIX #8: Tambahkan slug eksplisit dan validasi uniqueness-nya
-        $slug = Str::slug($request->name);
-
-        // Handle duplicate slug dengan append angka
-        $originalSlug = $slug;
-        $count = 1;
-        while (Domain::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count;
-            $count++;
-        }
+        $fullName = $request->domain_name . $request->domain_ext;
 
         Domain::create([
-            'name'        => $request->name,
-            'slug'        => $slug,
+            'name'        => $fullName,
+            'slug'        => $this->generateUniqueSlug($fullName),
             'description' => $request->description,
             'price'       => $request->price,
             'status'      => $request->status,
         ]);
 
-        return redirect()
-            ->route('admin.domains')
+        return redirect()->route('admin.domains')
             ->with('success', 'Domain berhasil ditambahkan!');
     }
 
-    // FORM EDIT DOMAIN
     public function edit(Domain $domain)
     {
         return view('admin.crud.domains.edit', compact('domain'));
     }
 
-    // UPDATE DOMAIN
     public function update(Request $request, Domain $domain)
     {
         $request->validate([
-            'name'        => 'required|unique:domains,name,' . $domain->id,
+            'name'        => 'required|string|max:255',
             'price'       => 'required|numeric|min:0',
             'status'      => 'required|in:Available,Sold',
             'description' => 'nullable|string',
         ]);
 
-        // Regenerasi slug hanya jika nama berubah
-        $slug = $domain->slug;
-        if ($domain->name !== $request->name) {
-            $slug = Str::slug($request->name);
-
-            // Handle duplicate slug
-            $originalSlug = $slug;
-            $count = 1;
-            while (Domain::where('slug', $slug)->where('id', '!=', $domain->id)->exists()) {
-                $slug = $originalSlug . '-' . $count;
-                $count++;
-            }
-        }
-
         $domain->update([
             'name'        => $request->name,
-            'slug'        => $slug,
+            'slug'        => $this->generateUniqueSlug($request->name),
             'description' => $request->description,
             'price'       => $request->price,
             'status'      => $request->status,
         ]);
 
-        return redirect()
-            ->route('admin.domains')
-            ->with('success', 'Domain berhasil diupdate!');
+        return redirect()->route('admin.domains')
+            ->with('success', 'Domain berhasil diperbarui!');
     }
 
-    // HAPUS DOMAIN
     public function destroy(Domain $domain)
     {
         $domain->delete();
-
-        return redirect()
-            ->route('admin.domains')
+        return redirect()->route('admin.domains')
             ->with('success', 'Domain berhasil dihapus!');
     }
 }

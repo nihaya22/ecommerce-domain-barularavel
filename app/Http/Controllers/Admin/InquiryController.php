@@ -13,9 +13,6 @@ class InquiryController extends Controller
     // URL: /admin/inquiries
     // VIEW: resources/views/admin/pages/inquiries.blade.php
     // =========================
-
-    // BUG FIX #5: Sebelumnya pakai dummy data hardcoded
-    // Sekarang membaca dari database
     public function index()
     {
         $inquiries = Inquiry::latest()->get();
@@ -23,10 +20,12 @@ class InquiryController extends Controller
         return view('admin.pages.inquiries', compact('inquiries'));
     }
 
-    // Detail inquiry
+    // =========================
+    // DETAIL INQUIRY
+    // Otomatis tandai 'Read' saat dibuka
+    // =========================
     public function show(Inquiry $inquiry)
     {
-        // Tandai sebagai sudah dibaca jika masih "New"
         if ($inquiry->status === 'New') {
             $inquiry->update(['status' => 'Read']);
         }
@@ -34,7 +33,9 @@ class InquiryController extends Controller
         return view('admin.pages.inquiry-show', compact('inquiry'));
     }
 
-    // Update status inquiry (New / Read / Replied)
+    // =========================
+    // UPDATE STATUS INQUIRY
+    // =========================
     public function updateStatus(Request $request, Inquiry $inquiry)
     {
         $request->validate([
@@ -46,7 +47,20 @@ class InquiryController extends Controller
         return back()->with('success', 'Status inquiry berhasil diupdate!');
     }
 
-    // Hapus inquiry
+    // =========================
+    // TANDAI SEMUA DIBACA
+    // URL: /admin/inquiries/mark-all-read
+    // =========================
+    public function markAllRead()
+    {
+        Inquiry::where('status', 'New')->update(['status' => 'Read']);
+
+        return back()->with('success', 'Semua notifikasi sudah ditandai dibaca ✅');
+    }
+
+    // =========================
+    // HAPUS INQUIRY
+    // =========================
     public function destroy(Inquiry $inquiry)
     {
         $inquiry->delete();

@@ -57,6 +57,22 @@ Route::get('/login', function () {
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::resource('domains', \App\Http\Controllers\Admin\DomainExtensionController::class);
+});
+
+
+
+Route::get('/domain-list', [DomainController::class, 'list'])
+    ->name('domain.list');
+
+
+use App\Http\Controllers\Admin\DomainExtensionController;
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::resource('domain-extensions', DomainExtensionController::class);
+});
+
 
 // ================= ADMIN PANEL =================
 
@@ -83,6 +99,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
     // ================= INQUIRIES =================
+    Route::get('inquiries/mark-all-read', [InquiryController::class, 'markAllRead'])->name('inquiries.markAllRead');
     Route::get('inquiries', [InquiryController::class, 'index'])->name('inquiries');
     Route::get('inquiries/{inquiry}', [InquiryController::class, 'show'])->name('inquiries.show');
     Route::patch('inquiries/{inquiry}/status', [InquiryController::class, 'updateStatus'])->name('inquiries.updateStatus');
